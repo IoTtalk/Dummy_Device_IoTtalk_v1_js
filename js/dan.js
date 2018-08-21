@@ -14,6 +14,7 @@ var dan = (function () {
 	var _odf_timestamp = {};
     var _suspended = false;
     var _ctl_timestamp = '';
+	var _password = '';
 
     function init (push, pull, endpoint, mac_addr, profile, callback) {
         _pull = pull;
@@ -39,10 +40,11 @@ var dan = (function () {
         csmapi.set_endpoint(endpoint);
 
         var retry_count = 0;
-        function register_callback (result) {
+        function register_callback (result, password = '') {
             if (result) {
                 if (!_registered) {
                     _registered = true;
+                    _password = password;
 					_idf_list = profile['idf_list'].slice();
 					_odf_list = profile['odf_list'].slice();
 					_df_list = profile['df_list'].slice();
@@ -182,7 +184,7 @@ var dan = (function () {
         }
         //_df_is_odf[idf_name] = false;
         if (idf_name == '__Ctl_I__' || _df_selected[idf_name]) {
-            csmapi.push(_mac_addr, idf_name, data, callback);
+            csmapi.push(_mac_addr, _password, idf_name, data, callback);
         }
     }
 

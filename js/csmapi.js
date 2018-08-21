@@ -15,9 +15,10 @@ var csmapi = (function () {
             url: ENDPOINT +'/'+ mac_addr,
             data: JSON.stringify({'profile': profile}),
             contentType:"application/json; charset=utf-8",
-        }).done(function () {
+        }).done(function (result) {
             if (callback) {
-                callback(true);
+                //console.log("register done result", result);
+                callback(true, result.password);
             }
         }).fail(function () {
             if (callback) {
@@ -62,12 +63,13 @@ var csmapi = (function () {
         });
     }
 
-    function push (mac_addr, idf_name, data, callback) {
+    function push (mac_addr, password, idf_name, data, callback) {
         $.ajax({
             type: 'PUT',
             url: ENDPOINT +'/'+ mac_addr +'/'+ idf_name,
             data: JSON.stringify({'data': data}),
             contentType:"application/json; charset=utf-8",
+            headers: {'password-key': password},
         }).done(function () {
             if (callback) {
                 callback(true);
